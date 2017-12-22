@@ -382,7 +382,7 @@ var PasswordBoxWindows = createReactClass({
       <TouchableWithoutFeedback
         onPress={this._onPress}
         rejectResponderTermination={true}
-        accessible={this.props.accessible}
+        importantForAccessibility={this.props.importantForAccessibility}
         accessibilityLabel={this.props.accessibilityLabel}
         accessibilityTraits={this.props.accessibilityTraits}
         testID={this.props.testID}>

@@ -152,6 +152,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\EnumHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\ExpressionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\ReflectionHelpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UIManager\AccessibilityTrait.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UIManager\AccessibleAutomationPeer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UIManager\AccessibleCanvas.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UIManager\Annotations\ReactPropAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UIManager\Annotations\ReactPropBaseAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UIManager\Annotations\ReactPropGroupAttribute.cs" />
@@ -159,6 +162,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)UIManager\BorderedCanvas.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UIManager\BorderExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UIManager\ColorHelpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UIManager\Events\InvokeEvent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UIManager\IAccessible.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UIManager\ImportantForAccessibility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UIManager\Events\BlurEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UIManager\Events\FocusEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UIManager\Events\KeyEvent.cs" />

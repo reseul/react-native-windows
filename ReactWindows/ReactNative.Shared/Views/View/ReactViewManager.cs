@@ -83,7 +83,7 @@ namespace ReactNative.Views.View
         }
 
         /// <summary>
-        /// Creates a new view instance of type <see cref="Canvas"/>.
+        /// Creates a new view instance of type <see cref="BorderedCanvas"/>.
         /// </summary>
         /// <param name="reactContext">The React context.</param>
         /// <returns>The view instance.</returns>
@@ -94,17 +94,52 @@ namespace ReactNative.Views.View
 
         /// <summary>
         /// Sets whether or not the view is an accessibility element.
+        /// Since "accessible" is an Android-only ReactNative property and also is not in ReactXP at all,
+        /// this method is noop and exists just to avoid crashes if for some reason the property
+        /// gets to this level. For similar functionality see <see cref="SetImportantForAccessibility"/>
         /// </summary>
         /// <param name="view">The view.</param>
         /// <param name="accessible">A flag indicating whether or not the view is an accessibility element.</param>
         [ReactProp("accessible")]
         public void SetAccessible(BorderedCanvas view, bool accessible)
         {
-            // TODO: #557 Provide implementation for View's accessible prop
+            // This space is intentionally left blank.
+        }
 
-            // We need to have this stub for this prop so that Views which
-            // specify the accessible prop aren't considered to be layout-only.
-            // The proper implementation is still to be determined.
+        /// <summary>
+        /// Set accessibility traits for the view.
+        /// </summary>
+        /// <param name="view">The view.</param>
+        /// <param name="accessibilityTraitsValue">Can be <see cref="JArray"/> of objects or a single object. 
+        ///     String representation of the object(s) is parsed as <see cref="AccessibilityTrait"/>.</param>
+        [ReactProp("accessibilityTraits")]
+        public void SetAccessibilityTraits(BorderedCanvas view, object accessibilityTraitsValue)
+        {
+            AccessibilityTrait[] result = null;
+            if (accessibilityTraitsValue != null)
+            {
+                if (accessibilityTraitsValue is JArray asJArray)
+                {
+                    result = asJArray.Values<string>().Select(EnumHelpers.Parse<AccessibilityTrait>).ToArray();
+        }
+                else
+                {
+                    result = new[] {EnumHelpers.Parse<AccessibilityTrait>(accessibilityTraitsValue.ToString()) };
+                }
+            }
+            view.AccessibilityTraits = result;
+        }
+
+        /// <summary>
+        /// Sets <see cref="ImportantForAccessibility"/> mode for the view.
+        /// </summary>
+        /// <param name="view">The view.</param>
+        /// <param name="importantForAccessibilityValue">The string to be parsed as <see cref="ImportantForAccessibility"/>.</param>
+        [ReactProp("importantForAccessibility")]
+        public void SetImportantForAccessibility(BorderedCanvas view, string importantForAccessibilityValue)
+        {
+            var importantForAccessibility = EnumHelpers.ParseNullable<ImportantForAccessibility>(importantForAccessibilityValue) ?? ImportantForAccessibility.Auto;
+            view.ImportantForAccessibility = importantForAccessibility;
         }
 
         /// <summary>
@@ -134,7 +169,7 @@ namespace ReactNative.Views.View
         public void SetBorderRadius(BorderedCanvas view, int index, double radius)
         {
             var border = GetOrCreateBorder(view);
-            var cornerRadius = border.CornerRadius == null ? new CornerRadius() : border.CornerRadius;
+            var cornerRadius = border.CornerRadius;
 
             switch ((Radius)index)
             {

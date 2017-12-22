@@ -1,9 +1,12 @@
+using ReactNative.UIManager;
 #if WINDOWS_UWP
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Automation.Peers;
 #else
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Automation.Peers;
 #endif
 
 namespace ReactNative.Views.ControlView
@@ -11,13 +14,11 @@ namespace ReactNative.Views.ControlView
     /// <summary>
     /// A native control with a single Canvas child.
     /// </summary>
-    public class ReactControl : UserControl
+    public class ReactControl : UserControl, IAccessible
     {
         private readonly Canvas _canvas;
 
-        /// <summary>
-        /// Instantiates the <see cref="ReactControl"/>. 
-        /// </summary>
+        /// <inheritdoc />
         public ReactControl()
         {
             Content = _canvas = new Canvas
@@ -33,30 +34,30 @@ namespace ReactNative.Views.ControlView
         /// <summary>
         /// The view children.
         /// </summary>
-        public UIElementCollection Children
-        {
-            get
-            {
-                return _canvas.Children;
-            }
-        }
+        public UIElementCollection Children => _canvas.Children;
 
         /// <summary>
         /// Keys that should be handled during <see cref="UIElement.KeyDownEvent"/>. 
         /// </summary>
-        public int[] HandledKeyDownKeys
-        {
-            get;
-            set;
-        }
+        public int[] HandledKeyDownKeys { get; set; }
 
         /// <summary>
         /// Keys that should be handled during <see cref="UIElement.KeyUpEvent"/>. 
         /// </summary>
-        public int[] HandledKeyUpKeys
+        public int[] HandledKeyUpKeys { get; set; }
+
+        /// <inheritdoc />
+        protected override AutomationPeer OnCreateAutomationPeer()
         {
-            get;
-            set;
+            return new AccessibleAutomationPeer<ReactControl>(this);
         }
+
+        // TODO: implement runtime change raising event to screen reader #1228350
+        /// <inheritdoc />
+        public AccessibilityTrait[] AccessibilityTraits { get; set; }
+
+        // TODO: implement runtime change raising event to screen reader #1228350
+        /// <inheritdoc />
+        public ImportantForAccessibility ImportantForAccessibility { get; set; }
     }
 }

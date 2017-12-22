@@ -95,6 +95,24 @@ namespace ReactNative.Views.ControlView
             }
         }
 
+        /// <inheritdoc />
+        public override IReadOnlyDictionary<string, object> ExportedCustomDirectEventTypeConstants
+        {
+            get
+            {
+                return new Dictionary<string, object>
+                {
+                    {
+                        "topAccessibilityTap",
+                        new Dictionary<string, object>
+                        {
+                            { "registrationName", "onAccessibilityTap" },
+                        }
+                    },
+                };
+            }
+        }
+
         /// <summary>
         /// Sets whether the view is a tab stop.
         /// </summary>

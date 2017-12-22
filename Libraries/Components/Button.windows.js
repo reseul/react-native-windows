@@ -155,35 +155,46 @@ class Button extends React.Component {
     if (Platform.OS === "windows") {
       const tabIndex = this.props.tabIndex || 0;
       const windowsTabFocusable = !disabled && tabIndex >= 0;
-      content =
-        <FocusableWindows
-          ref={this._setFocusableRef}
+      return (
+        <Touchable
+          importantForAccessibility="no"
+          testID={testID}
           disabled={disabled}
-          isTabStop={windowsTabFocusable}
-          tabIndex={tabIndex}
-          disableSystemFocusVisuals={this.props.disableSystemFocusVisuals}
-          handledKeyDownKeys={DOWN_KEYCODES}
-          handledKeyUpKeys={UP_KEYCODES}
-          onKeyDown={this._onKeyDown}
-          onKeyUp={this._onKeyUp}
-          onFocus={this._onFocus}
-          onBlur={this._onBlur}
-        >
-          {content}
-      </FocusableWindows>;
+          onPress={onPress}>
+            <FocusableWindows
+              ref={this._setFocusableRef}
+              disabled={disabled}
+              isTabStop={windowsTabFocusable}
+              tabIndex={tabIndex}
+              disableSystemFocusVisuals={this.props.disableSystemFocusVisuals}
+              accessibilityComponentType="button"
+              accessibilityLabel={accessibilityLabel}
+              accessibilityTraits={accessibilityTraits}
+              handledKeyDownKeys={DOWN_KEYCODES}
+              handledKeyUpKeys={UP_KEYCODES}
+              onKeyDown={this._onKeyDown}
+              onKeyUp={this._onKeyUp}
+              onFocus={this._onFocus}
+              onBlur={this._onBlur}
+              onAccessibilityTap = {this._onAccessibilityTap}
+            >
+              {content}
+            </FocusableWindows>
+        </Touchable>
+      );
+    } else {
+      return (
+        <Touchable
+          accessibilityComponentType="button"
+          accessibilityLabel={accessibilityLabel}
+          accessibilityTraits={accessibilityTraits}
+          testID={testID}
+          disabled={disabled}
+          onPress={onPress}>
+            {content}
+        </Touchable>
+      );
     }
-
-    return (
-      <Touchable
-        accessibilityComponentType="button"
-        accessibilityLabel={accessibilityLabel}
-        accessibilityTraits={accessibilityTraits}
-        testID={testID}
-        disabled={disabled}
-        onPress={onPress}>
-          {content}
-      </Touchable>
-    );
   }
 
   _setFocusableRef = (ref): void => {
@@ -223,6 +234,12 @@ class Button extends React.Component {
   _onBlur = (e): void => {
     if (this.props.onBlur) {
       this.props.onBlur(e);
+    }
+  }
+
+  _onAccessibilityTap = (e): void => {
+    if (!this.props.disabled && this.props.onPress) {
+      this.props.onPress(e);
     }
   }
 
