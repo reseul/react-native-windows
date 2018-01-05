@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json.Linq;
 using ReactNative.Reflection;
 using ReactNative.UIManager;
 using ReactNative.UIManager.Annotations;
@@ -39,13 +42,7 @@ namespace ReactNative.Views.View
         /// The name of this view manager. This will be the name used to 
         /// reference this view manager from JavaScript.
         /// </summary>
-        public override string Name
-        {
-            get
-            {
-                return ViewProps.ViewClassName;
-            }
-        }
+        public override string Name => ViewProps.ViewClassName;
 
         /// <summary>
         /// Checks if the Canvas has a Border already.
@@ -94,16 +91,14 @@ namespace ReactNative.Views.View
 
         /// <summary>
         /// Sets whether or not the view is an accessibility element.
-        /// Since "accessible" is an Android-only ReactNative property and also is not in ReactXP at all,
-        /// this method is noop and exists just to avoid crashes if for some reason the property
-        /// gets to this level. For similar functionality see <see cref="SetImportantForAccessibility"/>
+        /// This method is noop for now.
         /// </summary>
         /// <param name="view">The view.</param>
         /// <param name="accessible">A flag indicating whether or not the view is an accessibility element.</param>
         [ReactProp("accessible")]
         public void SetAccessible(BorderedCanvas view, bool accessible)
         {
-            // This space is intentionally left blank.
+            // TODO: #557 Provide implementation for View's accessible prop
         }
 
         /// <summary>
@@ -120,11 +115,22 @@ namespace ReactNative.Views.View
             {
                 if (accessibilityTraitsValue is JArray asJArray)
                 {
-                    result = asJArray.Values<string>().Select(EnumHelpers.Parse<AccessibilityTrait>).ToArray();
-        }
+                    var list = new List<AccessibilityTrait>();
+                    foreach (var s in asJArray.Values<string>())
+                    {
+                        if (EnumHelpers.TryParse<AccessibilityTrait>(s, out var accessibilityTrait))
+                        {
+                            list.Add(accessibilityTrait);
+                        }
+                    }
+                    result = list.Any() ? list.ToArray() : null;
+                }
                 else
                 {
-                    result = new[] {EnumHelpers.Parse<AccessibilityTrait>(accessibilityTraitsValue.ToString()) };
+                    if (EnumHelpers.TryParse<AccessibilityTrait>(accessibilityTraitsValue.ToString(), out var accessibilityTrait))
+                    {
+                        result = new[] { accessibilityTrait };
+                    }
                 }
             }
             view.AccessibilityTraits = result;

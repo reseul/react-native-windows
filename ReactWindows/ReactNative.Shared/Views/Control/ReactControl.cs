@@ -52,11 +52,11 @@ namespace ReactNative.Views.ControlView
             return new AccessibleAutomationPeer<ReactControl>(this);
         }
 
-        // TODO: implement runtime change raising event to screen reader #1228350
+        // TODO: implement runtime change raising event to screen reader #1562
         /// <inheritdoc />
         public AccessibilityTrait[] AccessibilityTraits { get; set; }
 
-        // TODO: implement runtime change raising event to screen reader #1228350
+        // TODO: implement runtime change raising event to screen reader #1562
         /// <inheritdoc />
         public ImportantForAccessibility ImportantForAccessibility { get; set; }
     }

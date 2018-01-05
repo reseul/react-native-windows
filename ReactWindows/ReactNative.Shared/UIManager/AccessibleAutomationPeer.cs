@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,13 +45,70 @@ namespace ReactNative.UIManager
         /// <inheritdoc />
         protected override bool IsContentElementCore()
         {
-            return Owner.ImportantForAccessibility == ImportantForAccessibility.Yes;
+            return IsVisibleToScreenReader() ?? base.IsContentElementCore();
         }
 
         /// <inheritdoc />
         protected override bool IsControlElementCore()
         {
-            return Owner.ImportantForAccessibility == ImportantForAccessibility.Yes;
+            return IsVisibleToScreenReader() ?? base.IsControlElementCore();
+        }
+
+        /// <summary>
+        /// Checks if this peer should be visible to screen reader according to 
+        /// owner's <see cref="ImportantForAccessibility"/>.
+        /// </summary>
+        /// <returns>True if visible, false if not, null if not defined.</returns>
+        private bool? IsVisibleToScreenReader()
+        {
+            switch (Owner.ImportantForAccessibility)
+            {
+                case ImportantForAccessibility.Yes:
+                    return true;
+                case ImportantForAccessibility.No:
+                case ImportantForAccessibility.NoHideDescendants:
+                    return false;
+                case ImportantForAccessibility.Auto:
+                    return null;
+                default:
+                    throw new InvalidOperationException(FormattableString.Invariant(
+                        $"Unknown {nameof(ImportantForAccessibility)} value {Owner.ImportantForAccessibility}"));
+            }
+        }
+
+        /// <inheritdoc />
+        protected override string GetNameCore()
+        {
+            string baseName = base.GetNameCore();
+            bool hasName = !string.IsNullOrWhiteSpace(baseName);
+            bool aggregationIsNotRequired = Owner.ImportantForAccessibility != ImportantForAccessibility.Yes;
+            if (hasName || aggregationIsNotRequired)
+            {
+                return baseName;
+            }
+            return GetRecursivelyAggregatedName(this);
+        }
+
+        private string GetRecursivelyAggregatedName(AutomationPeer peer)
+        {
+            var sb = new StringBuilder();
+            foreach (var child in peer.GetChildren())
+            {
+                string name = child.GetName();
+                if (string.IsNullOrEmpty(name))
+                {
+                    name = GetRecursivelyAggregatedName(child);
+                }
+                if (!string.IsNullOrEmpty(name))
+                {
+                    if (sb.Length > 0)
+                    {
+                        sb.Append(" ");
+                    }
+                    sb.Append(name);
+                }
+            }
+            return sb.ToString();
         }
 
         /// <inheritdoc />
@@ -61,24 +119,6 @@ namespace ReactNative.UIManager
                 return AutomationControlType.Button;
             }
             return base.GetAutomationControlTypeCore();
-        }
-
-        /// <inheritdoc />
-        protected override string GetNameCore()
-        {
-            string baseName = base.GetNameCore();
-            if (!string.IsNullOrWhiteSpace(baseName)
-                || Owner.ImportantForAccessibility != ImportantForAccessibility.Yes)
-            {
-                return baseName;
-            }
-
-            var sb = new StringBuilder();
-            foreach (var peer in base.GetChildrenCore())
-            {
-                sb.Append(peer.GetName()).Append(" ");
-            }
-            return sb.ToString();
         }
 
         /// <inheritdoc />
@@ -98,7 +138,7 @@ namespace ReactNative.UIManager
             Owner.GetReactContext()
                 .GetNativeModule<UIManagerModule>()
                 .EventDispatcher
-                .DispatchEvent(new InvokeEvent(Owner.GetTag()));
+                .DispatchEvent(new AccessibilityTapEvent(Owner.GetTag()));
         }
     }
 }

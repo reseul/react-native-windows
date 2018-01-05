@@ -167,6 +167,10 @@ class Button extends React.Component {
               isTabStop={windowsTabFocusable}
               tabIndex={tabIndex}
               disableSystemFocusVisuals={this.props.disableSystemFocusVisuals}
+              /**
+               * The accessibility props should be on focusable element to simplify support
+               * of a Windows Narrator feature of Narrator following focus.
+               */
               accessibilityComponentType="button"
               accessibilityLabel={accessibilityLabel}
               accessibilityTraits={accessibilityTraits}
@@ -176,7 +180,7 @@ class Button extends React.Component {
               onKeyUp={this._onKeyUp}
               onFocus={this._onFocus}
               onBlur={this._onBlur}
-              onAccessibilityTap = {this._onAccessibilityTap}
+              onAccessibilityTap={this._onAccessibilityTap}
             >
               {content}
             </FocusableWindows>

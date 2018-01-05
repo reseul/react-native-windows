@@ -9,7 +9,7 @@ using System.Windows.Automation.Peers;
 namespace ReactNative.UIManager
 {
     /// <summary>
-    /// Canvas with ReactXP/ReactNative accessibility properties support. 
+    /// Canvas with ReactNative accessibility properties support. 
     /// </summary>
     public class AccessibleCanvas : Canvas, IAccessible
     {
@@ -19,12 +19,12 @@ namespace ReactNative.UIManager
             return new AccessibleAutomationPeer<AccessibleCanvas>(this);
         }
 
-        // TODO: implement runtime change raising event to screen reader #1228350
+        // TODO: implement runtime change raising event to screen reader #1562
         /// <inheritdoc />
         public AccessibilityTrait[] AccessibilityTraits { get; set; }
 
-        // TODO: implement runtime change raising event to screen reader #1228350
+        // TODO: implement runtime change raising event to screen reader #1562
         /// <inheritdoc />
-        public ImportantForAccessibility ImportantForAccessibility { get; set; }
+        public ImportantForAccessibility ImportantForAccessibility { get; set; } = ImportantForAccessibility.Auto;
     }
 }

@@ -162,7 +162,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)UIManager\BorderedCanvas.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UIManager\BorderExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UIManager\ColorHelpers.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UIManager\Events\InvokeEvent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UIManager\Events\AccessibilityTapEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UIManager\IAccessible.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UIManager\ImportantForAccessibility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UIManager\Events\BlurEvent.cs" />

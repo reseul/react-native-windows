@@ -1,8 +1,7 @@
 namespace ReactNative.UIManager
 {
     /// <summary>
-    /// Accessibility importance mode. Copied form ReactXP documentation:
-    /// https://microsoft.github.io/reactxp/docs/accessibility.html
+    /// Accessibility importance mode.
     /// </summary>
     public enum ImportantForAccessibility
     {
