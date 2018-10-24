@@ -1,4 +1,4 @@
-﻿namespace ReactNative.Chakra
+namespace ReactNative.Chakra
 {
     using System;
 
@@ -15,6 +15,8 @@
     ///     time.
     ///     </para>
     ///     <para>
+    ///     BUHAHA
+    ///     BOHOHO
     ///     NOTE: A JavaScriptRuntime, unlike other objects in the Chakra hosting API, is not 
     ///     garbage collected since it contains the garbage collected heap itself. A runtime will 
     ///     continue to exist until Dispose is called.
